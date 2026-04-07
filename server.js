@@ -1,12 +1,19 @@
-const express = require("express");
-const path = require("path");
-
+const express = require('express');
 const app = express();
 
-app.use(express.static(path.join(__dirname)));
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("Server running on port " + PORT);
+// ОБЯЗАТЕЛЬНО: обработчик для корневого пути
+app.get('/', (req, res) => {
+  res.send('OK');
 });
+
+// ОБЯЗАТЕЛЬНО: обработчик для health check (Railway использует его)
+app.get('/health', (req, res) => {
+  res.status(200).send('healthy');
+});
+
+// Правильный способ получить порт от Railway
+const port = process.env.PORT || 3000;
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on port ${port}`);
+});;
